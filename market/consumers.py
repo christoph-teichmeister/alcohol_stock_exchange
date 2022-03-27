@@ -6,8 +6,6 @@ from market.services import MarketChartContextService
 
 class MarketStatusConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        # self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-        # self.room_group_name = f"chat_{self.room_name}"
         self.room_group_name = "market-status"
 
         # Join room group
@@ -19,7 +17,7 @@ class MarketStatusConsumer(AsyncWebsocketConsumer):
         """Leave room group"""
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    async def update_market(self, *args, **kwargs):
+    async def update_market_price_chart(self, *args, **kwargs):
         """Sends updated price data for the beverages to frontend"""
 
         # Get price data
