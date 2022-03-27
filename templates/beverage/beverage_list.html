@@ -1,0 +1,37 @@
+{% extends 'base_template.html' %}
+
+{% block title %}BSM - Beverages{% endblock %}
+
+{% block content %}
+    {% if object_list %}
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Iterate over object_list -->
+                {% for beverage in beverages %}
+                    {% include 'beverage/beverage_card.html' %}
+{#                    <div class="col-xl-3 cold-lg-6 col-sm-12">#}
+{#                        <div class="card">#}
+{#                            <h2 class="card-title text-break">{{ beverage.name }}</h2>#}
+{#                            <p>Price: {{ beverage.current_stock_price | floatformat:2 }} €</p>#}
+{#                            <p>Sales: {{ beverage.number_of_sales }}</p>#}
+{##}
+{#                            <button class="btn btn-action"#}
+{#                                    hx-trigger="click"#}
+{#                                    hx-post='{% url 'beverage_sold' beverage.id %}'#}
+                                    {# hx-vals='{"sales": "{{ beverage.id }}"}'#}
+{#                                    hx-swap="none"#}
+{#                                    style="cursor: pointer"#}
+{#                            >+</button>#}
+{#                        </div>#}
+{#                    </div>#}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="content">
+            <h2 class="content-title">No Beverages yet</h2>
+            <p>Start by adding some in the admin!</p>
+            <hr/>
+        </div>
+    {% endif %}
+{% endblock %}

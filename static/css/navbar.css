@@ -1,0 +1,9 @@
+.open-sidebar {
+    transform: rotate(180deg);
+    transition: transform 0.5s linear;
+}
+
+.close-sidebar {
+    transform: rotate(0deg);
+    transition: transform 0.5s linear;
+}

@@ -1,0 +1,36 @@
+{% load static %}
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}"/>
+{% endblock %}
+
+<!-- Reference: https://www.gethalfmoon.com/docs/navbar -->
+<div class="navbar-content">
+    <button class="btn btn-action" type="button"
+            onclick="halfmoon.toggleSidebar()">
+        <i class="fa fa-bars" aria-hidden="true"></i>
+        <div id="toggle-sidebar-symbol" class="close-sidebar"><</div>
+    </button>
+</div>
+
+<script>
+  // EventListener to toggle the text content of the sidebar btn from between > and <
+  document.addEventListener(
+    "click",
+    function () {
+      const pageWrapper = document.getElementsByClassName("page-wrapper")[0]
+      const toggleSidebarSymbol = document.getElementById('toggle-sidebar-symbol')
+      const navbarIsHidden = pageWrapper.getAttribute("data-sidebar-hidden")
+
+      {#toggleSidebarBtn.textContent = navbarIsHidden ? '>' : '<'#}
+      {#toggleSidebarBtn.textContent = navbarIsHidden ? '>' : '<'#}
+
+      console.log('navbarIsHidden', navbarIsHidden)
+
+      if (navbarIsHidden) {
+        toggleSidebarSymbol.className = 'open-sidebar'
+      } else {
+        toggleSidebarSymbol.className = 'close-sidebar'
+      }
+    }, false)
+
+</script>

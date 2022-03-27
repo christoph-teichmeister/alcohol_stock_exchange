@@ -1,0 +1,85 @@
+{% extends 'base_template.html' %}
+
+{% block title %}BSM - Market Status{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <canvas id="MarketStatusChart"></canvas>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script>
+      const getLabels = () => [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+      ];
+
+      const getDatasets = (props) => {
+        const {sales_per_beverage, color_config} = props
+        let datasets = []
+
+        sales_per_beverage.map(beverage => {
+          const {id, name, prices} = beverage
+          const colorConfig = color_config.filter(entry => entry.id === id)[0]
+
+          datasets.push({
+            label: name,
+            backgroundColor: colorConfig.color,
+            borderColor: colorConfig.color,
+            data: prices,
+          })
+        })
+        return datasets
+      }
+
+      const getChartData = (props) => {
+        return {
+          labels: getLabels(),
+          datasets: getDatasets(props),
+        }
+      }
+
+      const getConfig = (props) => {
+        return {
+          type: 'line',
+          data: getChartData(props),
+          options: {}
+        }
+      }
+
+      const chart = document.getElementById('MarketStatusChart')
+
+      console.log(chart)
+
+      new Chart(
+        document.getElementById('MarketStatusChart'),
+        getConfig(JSON.parse('{{ data }}'.replaceAll('&quot;', '"')))
+      );
+
+      const chatSocket = new WebSocket(`ws://${window.location.host}/ws/market-status/`);
+
+      chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+
+        if (chart) chart.destroy()
+
+        // https://www.chartjs.org/docs/latest/
+        new Chart(
+          chart,
+          getConfig(data)
+        );
+      };
+
+      chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+      };
+
+    </script>
+{% endblock %}

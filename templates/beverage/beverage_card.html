@@ -1,0 +1,24 @@
+<div id="beverage-card-{{ beverage.id }}" class="col-xl-3 cold-lg-6 col-sm-12">
+    <div class="card">
+        <h2 class="card-title text-break">{{ beverage.name }}</h2>
+        <p>Price: {{ beverage.current_stock_price | floatformat:2 }} €</p>
+        <p>Sales: {{ beverage.number_of_sales }}</p>
+
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-square btn-success rounded-circle"
+               hx-trigger="click"
+               hx-post='{% url 'beverage_sold' beverage.id %}'
+               hx-swap="outerHTML"
+               hx-target="#beverage-card-{{ beverage.id }}"
+            >+</a>
+
+            <a class="ml-5 btn btn-square btn-danger rounded-circle"
+               hx-confirm="Are you sure that you want to revert the sale?"
+               hx-trigger="click"
+               hx-post='{% url 'beverage_revert_sale' beverage.id %}'
+               hx-swap="outerHTML"
+               hx-target="#beverage-card-{{ beverage.id }}"
+            >-</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta name="viewport" content="width=device-width"/>
+
+    <!-- Favicon and title -->
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+    <title>{% block title %}Beverage Stock Market{% endblock %}</title>
+
+    {% block custom_css %}{% endblock %}
+
+    <!-- Halfmoon CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet"/>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+      // fade out loading screen once page is loaded
+      $(window).on('load', () => $("#loader").fadeOut("slow"));
+    </script>
+</head>
+<body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-set-preferred-mode-onload="true">
+<!-- Loader -->
+<div id="loader" style="position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: black;
+    opacity: 50%;
+">
+</div>
+
+<!-- Modals go here -->
+<!-- Reference: https://www.gethalfmoon.com/docs/modal -->
+
+<!-- Page wrapper start -->
+<div class="page-wrapper with-navbar with-sidebar with-navbar-fixed-bottom"
+     data-sidebar-type="overlayed-sm-and-down">
+    <!-- Sidebar overlay -->
+    <div class="sidebar-overlay" onclick="halfmoon.toggleSidebar()"></div>
+
+    <!-- Sticky alerts (toasts), empty container -->
+    <!-- Reference: https://www.gethalfmoon.com/docs/sticky-alerts-toasts -->
+    <div class="sticky-alerts"></div>
+
+    <!-- Navbar start -->
+    <nav class="navbar">
+        {% include '_partials/navbar.html' %}
+    </nav>
+    <!-- Navbar end -->
+
+    <!-- Sidebar start -->
+    <div class="sidebar">
+        {% include '_partials/sidebar.html' %}
+    </div>
+    <!-- Sidebar end -->
+
+    <!-- Content wrapper start -->
+    <div class="content-wrapper">
+        <!--
+        Add your page's main content here
+        Examples:
+        1. https://www.gethalfmoon.com/docs/content-and-cards/#building-a-page
+        2. https://www.gethalfmoon.com/docs/grid-system/#building-a-dashboard
+        -->
+        {% block content %}
+            <div class="content">
+                No content here :(
+            </div>
+        {% endblock %}
+    </div>
+    <!-- Content wrapper end -->
+
+    <!-- Navbar fixed bottom -->
+    <nav class="navbar navbar-fixed-bottom">
+        <span class="navbar-text">
+            Footer
+        </span>
+        <p class="text-right">
+        <span class="navbar-text">
+            Chris Teichmeister
+        </span>
+        </p>
+    </nav>
+    <!-- Navbar fixed bottom end -->
+
+</div>
+<!-- Page wrapper end -->
+
+{% block scripts %}
+    <!-- Halfmoon JS -->
+    <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+
+    <!-- HTMX CDN -->
+    <script src='https://unpkg.com/htmx.org@1.1.0'></script>
+
+    <!-- CSRF request in the headers -->
+    <script>
+      document.body.addEventListener('htmx:configRequest', (e) => {
+        e.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+      })
+    </script>
+{% endblock %}
+</body>
+</html>
