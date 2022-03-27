@@ -3,7 +3,7 @@
 {% block title %}BSM - Market Status{% endblock %}
 
 {% block content %}
-    <div class="content">
+    <div id="chartContent" class="content">
         <canvas id="MarketStatusChart"></canvas>
     </div>
 {% endblock %}
@@ -12,14 +12,10 @@
     {{ block.super }}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script>
-      const getLabels = () => [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-      ];
+      const getLabels = (props) => {
+        const {all_timestamps} = props
+        return all_timestamps
+      };
 
       const getDatasets = (props) => {
         const {sales_per_beverage, color_config} = props
@@ -41,7 +37,7 @@
 
       const getChartData = (props) => {
         return {
-          labels: getLabels(),
+          labels: getLabels(props),
           datasets: getDatasets(props),
         }
       }
@@ -54,11 +50,7 @@
         }
       }
 
-      const chart = document.getElementById('MarketStatusChart')
-
-      console.log(chart)
-
-      new Chart(
+      window.chart = new Chart(
         document.getElementById('MarketStatusChart'),
         getConfig(JSON.parse('{{ data }}'.replaceAll('&quot;', '"')))
       );
@@ -68,11 +60,11 @@
       chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
 
-        if (chart) chart.destroy()
+        if (window.chart) window.chart.destroy()
 
         // https://www.chartjs.org/docs/latest/
-        new Chart(
-          chart,
+        window.chart = new Chart(
+          document.getElementById('MarketStatusChart'),
           getConfig(data)
         );
       };
