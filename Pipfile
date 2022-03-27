@@ -5,12 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 black = "*"
+flake8 = "*"
 
 [packages]
 django = "*"
 channels = "*"
 django-htmx = "*"
 channels-redis = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.8"
