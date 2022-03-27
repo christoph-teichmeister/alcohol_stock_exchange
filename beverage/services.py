@@ -1,9 +1,11 @@
 from beverage.models import Beverage
+from market.services import RecalculatePricesService
 
 
 class BeverageSaleService:
     @staticmethod
     def process(beverage_id: int, revert_sale: bool = False):
+        """Increases or decreases a beverages sales. Recalculates all prices accordingly."""
         beverage = Beverage.objects.get(id=beverage_id)
 
         if revert_sale and beverage.number_of_sales <= 0:
@@ -12,6 +14,6 @@ class BeverageSaleService:
         beverage.number_of_sales += -1 if revert_sale else 1
         beverage.save()
 
-        setattr(beverage, "current_stock_price", beverage.stock_prices.first().price)
+        RecalculatePricesService.process(beverage=beverage, revert_sale=revert_sale)
 
         return beverage
