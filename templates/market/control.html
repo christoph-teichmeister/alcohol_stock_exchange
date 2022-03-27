@@ -1,0 +1,56 @@
+{% extends 'base_template.html' %}
+
+{% block title %}BSM - Market Controls{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <h2>Controls</h2>
+        <a class="btn btn-secondary"
+           hx-post='{% url 'reset_market' %}'
+           hx-trigger="click"
+           hx-swap='none'
+        >
+            Reset Market
+        </a>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+      document.body.addEventListener('htmx:afterRequest', function (evt) {
+        const {status, responseURL} = evt.detail.xhr
+
+        if (responseURL.includes('reset-market')) {
+          if (status === 200) {
+            toastSuccessAlert()
+          } else {
+            toastDangerAlert()
+          }
+        }
+      })
+
+    </script>
+
+    <script>
+      // Toasts success alert
+      function toastSuccessAlert() {
+        halfmoon.initStickyAlert({
+          title: "Action successful",
+          content: "Market was successfully reset!",
+          alertType: "alert-success",
+          fillType: "filled"
+        });
+      }
+
+      // Toasts danger alert
+      function toastDangerAlert() {
+        halfmoon.initStickyAlert({
+          title: "Action not successful",
+          content: "Market could not be reset!",
+          alertType: "alert-danger",
+          fillType: "filled"
+        });
+      }
+    </script>
+{% endblock %}
