@@ -1,15 +1,9 @@
-from http.client import HTTPResponse
-
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
-from django.db.models import Subquery, OuterRef
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import generic
 
 from beverage.models import Beverage
 from beverage.services import BeverageSaleService
-from stock_price.models import StockPrice
 
 
 class BeverageListView(generic.ListView):
@@ -18,16 +12,7 @@ class BeverageListView(generic.ListView):
     template_name = "beverage/beverage_list.html"
 
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .prefetch_related("stock_prices")
-            .annotate(
-                current_stock_price=Subquery(
-                    StockPrice.objects.filter(beverage=OuterRef("pk")).values("price")
-                )
-            )
-        )
+        return super().get_queryset().prefetch_related("stock_prices")
 
 
 class BeverageUpdateView(generic.UpdateView):
@@ -43,14 +28,6 @@ class BeverageUpdateView(generic.UpdateView):
         """
 
         beverage = BeverageSaleService.process(beverage_id=kwargs.get("pk"))
-
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            "market-status",
-            {
-                "type": "update_market",
-            },
-        )
 
         return render(
             request=request,
