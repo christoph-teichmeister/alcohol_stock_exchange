@@ -10,8 +10,8 @@ class BeverageManager(models.Manager):
         """Returns a list of dictionaries containing each beverages' id, name and all their prices."""
         return [
             {
-                "id": e.id,
                 "name": e.name,
+                "color": e.color,
                 "prices": [
                     float(f.price) for f in e.stock_prices.all().order_by("timestamp")
                 ],
