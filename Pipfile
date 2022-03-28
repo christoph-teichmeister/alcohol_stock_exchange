@@ -13,6 +13,7 @@ channels = "*"
 django-htmx = "*"
 channels-redis = "*"
 django-extensions = "*"
+django-colorfield = "*"
 
 [requires]
 python_version = "3.8"
