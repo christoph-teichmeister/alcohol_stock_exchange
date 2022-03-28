@@ -1,4 +1,5 @@
 from django.db import models
+from colorfield.fields import ColorField
 
 from beverage.managers import BeverageManager
 from stock_price.models import StockPrice
@@ -6,6 +7,7 @@ from stock_price.models import StockPrice
 
 class Beverage(models.Model):
     name = models.CharField(max_length=50)
+    color = ColorField()
     number_of_sales = models.IntegerField(default=0)
     retail_price = models.DecimalField(
         max_digits=4,
