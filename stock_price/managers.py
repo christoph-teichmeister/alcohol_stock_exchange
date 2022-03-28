@@ -21,13 +21,16 @@ class StockPriceManager(models.Manager):
             )
         )
 
-        last_timestamp = timestamp_values_list.last()
-        for minute_counter in range(1, 4):
-            distinct_timestamps.append(
-                (last_timestamp + timedelta(minutes=minute_counter)).strftime(
-                    "%H:%M:%S"
+        # If we are at the very start of the simulation (ie only the first two auto generated prices exist)...
+        if len(distinct_timestamps) == 2:
+            # ...add some timestamps, so that the chart is rendered nicely
+            last_timestamp = timestamp_values_list.last()
+            for minute_counter in range(1, 4):
+                distinct_timestamps.append(
+                    (last_timestamp + timedelta(minutes=minute_counter)).strftime(
+                        "%H:%M:%S"
+                    )
                 )
-            )
 
         return distinct_timestamps
 
