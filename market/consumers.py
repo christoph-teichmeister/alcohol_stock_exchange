@@ -1,7 +1,7 @@
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from market.services import MarketChartContextService
+from market.services import MarketHistoryChartContextService
 
 
 class MarketStatusConsumer(AsyncWebsocketConsumer):
@@ -21,7 +21,7 @@ class MarketStatusConsumer(AsyncWebsocketConsumer):
         """Sends updated price data for the beverages to frontend"""
 
         # Get price data
-        dict_data = await sync_to_async(MarketChartContextService.process)()
+        dict_data = await sync_to_async(MarketHistoryChartContextService.process)()
 
         # Send price_data to frontend
         await self.send(text_data=dict_data)

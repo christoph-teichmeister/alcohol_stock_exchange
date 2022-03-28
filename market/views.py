@@ -4,21 +4,21 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
 
-from market.services import MarketChartContextService, ResetMarketService
+from market.services import MarketHistoryChartContextService, ResetMarketService
 from market.services.update_market_price_chart_ws_service import (
     UpdateMarketPriceChartWebsocketService,
 )
 
 
-def market_status(request):
+def market_history(request):
     """
-    Renders the market status.html template filled with each beverage's price data as initial context.
+    Renders the market history.html template filled with each beverage's price data as initial context.
     The price data will be later updated via websockets.
     """
     return render(
         request=request,
-        template_name="market/status.html",
-        context={"data": MarketChartContextService.process()},
+        template_name="market/history.html",
+        context={"data": MarketHistoryChartContextService.process()},
     )
 
 

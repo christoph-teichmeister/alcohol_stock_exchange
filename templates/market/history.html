@@ -18,17 +18,16 @@
       };
 
       const getDatasets = (props) => {
-        const {sales_per_beverage, color_config} = props
+        const {sales_per_beverage} = props
         let datasets = []
 
         sales_per_beverage.map(beverage => {
-          const {id, name, prices} = beverage
-          const colorConfig = color_config.filter(entry => entry.id === id)[0]
+          const {name, color, prices} = beverage
 
           datasets.push({
             label: name,
-            backgroundColor: colorConfig.color,
-            borderColor: colorConfig.color,
+            backgroundColor: color,
+            borderColor: color,
             data: prices,
           })
         })

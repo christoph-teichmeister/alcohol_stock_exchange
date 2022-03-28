@@ -1,11 +1,10 @@
 import json
 
 from beverage.models import Beverage
-from core.helpers import get_random_hex_code
 from stock_price.models import StockPrice
 
 
-class MarketChartContextService:
+class MarketHistoryChartContextService:
     @staticmethod
     def process():
         """
@@ -25,10 +24,6 @@ class MarketChartContextService:
             {
                 "sales_per_beverage": all_sales_per_beverage,
                 "all_timestamps": all_timestamps,
-                "color_config": [
-                    {"id": beverage["id"], "color": get_random_hex_code()}
-                    for beverage in all_sales_per_beverage
-                ],
             }
         )
 
