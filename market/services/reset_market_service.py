@@ -15,7 +15,7 @@ class ResetMarketService:
         Iterates over each beverage, deletes excess prices, and creates two StockPrices with the same price.
         """
         now = timezone.now()
-        now_in_one_minute = now + timedelta(minutes=1)
+        now_in_one_second = now + timedelta(seconds=1)
 
         for beverage in Beverage.objects.all():
             beverage.number_of_sales = 0
@@ -35,7 +35,7 @@ class ResetMarketService:
             # Duplicate first price per beverage (so that graph is started)
             second_price = copy.deepcopy(first_price)
             second_price.pk = None
-            second_price.timestamp = now_in_one_minute
+            second_price.timestamp = now_in_one_second
             second_price.save()
 
             first_price.timestamp = now

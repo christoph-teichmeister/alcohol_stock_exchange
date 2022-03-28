@@ -5,6 +5,9 @@ from django.shortcuts import render
 from django.views import generic
 
 from market.services import MarketChartContextService, ResetMarketService
+from market.services.update_market_price_chart_ws_service import (
+    UpdateMarketPriceChartWebsocketService,
+)
 
 
 def market_status(request):
@@ -34,12 +37,6 @@ class MarketControlView(generic.TemplateView):
 
         ResetMarketService.process()
 
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            "market-status",
-            {
-                "type": "update_market_price_chart",
-            },
-        )
+        UpdateMarketPriceChartWebsocketService.process()
 
         return HttpResponse(200)

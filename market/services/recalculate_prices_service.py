@@ -1,12 +1,14 @@
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 from django.utils import timezone
 
 from beverage.models import Beverage
+from market.services.update_market_price_chart_ws_service import (
+    UpdateMarketPriceChartWebsocketService,
+)
 from stock_price.models import StockPrice
 
 
 class RecalculatePricesService:
+    # TODO CT: This is not a good calculation
     @staticmethod
     def process(beverage: Beverage, revert_sale: bool):
         timestamp = timezone.now()
@@ -14,7 +16,7 @@ class RecalculatePricesService:
         new_beverage_price = (
             beverage.current_stock_price * (1 + beverage.price_weight)
             if not revert_sale
-            else beverage.current_stock_price / (1 + beverage.price_weight)
+            else beverage.current_stock_price * (1 - beverage.price_weight)
         )
 
         # If a beverage is bought, its price should increase by * price_weight
@@ -30,7 +32,7 @@ class RecalculatePricesService:
                 other_beverage.current_stock_price * (1 + other_beverage.price_weight)
                 if revert_sale
                 else other_beverage.current_stock_price
-                / (1 + other_beverage.price_weight)
+                * (1 - other_beverage.price_weight)
             )
 
             StockPrice.objects.create(
@@ -39,10 +41,4 @@ class RecalculatePricesService:
                 timestamp=timestamp,
             )
 
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            "market-status",
-            {
-                "type": "update_market_price_chart",
-            },
-        )
+        UpdateMarketPriceChartWebsocketService.process()
