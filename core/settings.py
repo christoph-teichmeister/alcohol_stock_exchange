@@ -46,6 +46,7 @@ CUSTOM_APPS = [
 THIRD_PARTY_APPS = [
     "channels",
     "django_extensions",
+    "colorfield",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
