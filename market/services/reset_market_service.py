@@ -3,7 +3,9 @@ from datetime import timedelta
 
 from django.utils import timezone
 
-from beverage.models import Beverage
+from core.helpers import get_beverage_model
+
+Beverage = get_beverage_model()
 
 
 class ResetMarketService:

@@ -1,7 +1,9 @@
 import json
 
-from beverage.models import Beverage
-from stock_price.models import StockPrice
+from core.helpers import get_beverage_model, get_stock_price_model
+
+Beverage = get_beverage_model()
+StockPrice = get_stock_price_model()
 
 
 class MarketHistoryChartContextService:

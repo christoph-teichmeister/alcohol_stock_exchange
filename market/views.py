@@ -32,7 +32,7 @@ class MarketControlView(generic.TemplateView):
     @staticmethod
     def reset_market(request, *args, **kwargs):
         """
-        TODO CT
+        TODO CT: Comment
         """
 
         ResetMarketService.process()
