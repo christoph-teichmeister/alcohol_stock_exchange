@@ -1,44 +1,82 @@
+from decimal import Decimal
+
 from django.utils import timezone
 
-from beverage.models import Beverage
+from core.helpers import get_stock_price_model, get_beverage_model
 from market.services.update_market_price_chart_ws_service import (
     UpdateMarketPriceChartWebsocketService,
 )
-from stock_price.models import StockPrice
+
+Beverage = get_beverage_model()
+StockPrice = get_stock_price_model()
 
 
 class RecalculatePricesService:
-    # TODO CT: This is not a good calculation
-    @staticmethod
-    def process(beverage: Beverage, revert_sale: bool):
+    def process(self, beverage: Beverage):
         timestamp = timezone.now()
 
-        new_beverage_price = (
-            beverage.current_stock_price * (1 + beverage.price_weight)
-            if not revert_sale
-            else beverage.current_stock_price * (1 - beverage.price_weight)
-        )
-
-        # If a beverage is bought, its price should increase by * price_weight
         StockPrice.objects.create(
-            price=new_beverage_price,
+            price=self._get_new_price(beverage=beverage),
             beverage=beverage,
             timestamp=timestamp,
         )
 
         for other_beverage in Beverage.objects.exclude(id=beverage.id):
-            # ALL other prices must then fall by their weight => price /= 100 * price_weight
-            new_other_beverage_price = (
-                other_beverage.current_stock_price * (1 + other_beverage.price_weight)
-                if revert_sale
-                else other_beverage.current_stock_price
-                * (1 - other_beverage.price_weight)
-            )
-
             StockPrice.objects.create(
-                price=new_other_beverage_price,
+                price=self._get_new_price(beverage=other_beverage),
                 beverage=other_beverage,
                 timestamp=timestamp,
             )
 
         UpdateMarketPriceChartWebsocketService.process()
+
+    def _get_new_price(self, beverage: Beverage):
+        return self._first_function(beverage)
+        # return self._second_function(beverage)
+
+    @staticmethod
+    def _first_function(beverage: Beverage):
+        """f(x) = 1/{number_of_sales_before_price_falls_by_one_euro}x + {retail_price}"""
+
+        total_number_of_sales = Beverage.objects.get_total_number_of_sales()
+
+        beverage_sales_vs_total_sales = Decimal(
+            beverage.number_of_sales / total_number_of_sales
+        )
+
+        if beverage.number_of_sales == total_number_of_sales:
+            beverage_sales_vs_total_sales = beverage.number_of_sales
+
+        return (
+            (1 / beverage.number_of_sales_before_price_falls_by_one_euro)
+            * beverage_sales_vs_total_sales
+        ) + (beverage.retail_price + 1)
+
+    @staticmethod
+    def _second_function(beverage: Beverage):
+        """
+        1/(1/4 * (X ′0.9)) + 4
+        """
+        total_number_of_sales = Beverage.objects.get_total_number_of_sales()
+
+        beverage_sales_vs_total_sales = Decimal(
+            beverage.number_of_sales / total_number_of_sales
+        )
+
+        if beverage.number_of_sales == total_number_of_sales:
+            beverage_sales_vs_total_sales = beverage.number_of_sales
+
+        if beverage_sales_vs_total_sales == 0:
+            beverage_sales_vs_total_sales = 1
+
+        if beverage.retail_price % 2 == 0:
+            x1 = beverage.retail_price / 2
+            x2 = x1
+        else:
+            x1 = beverage.retail_price / 2 + Decimal(0.5)
+            x2 = beverage.retail_price - x1
+
+        return (
+            1 / (1 / x1 * Decimal(pow(beverage_sales_vs_total_sales, Decimal(0.9))))
+            + x2
+        )
