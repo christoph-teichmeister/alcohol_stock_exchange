@@ -1,0 +1,5 @@
+# PyCharms .idea folder
+.idea
+
+# Djangos generated DB file
+db.sqlite3
