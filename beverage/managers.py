@@ -27,14 +27,10 @@ class BeverageManager(models.Manager):
             current_retail_price=Sum("retail_price"),
         )["current_retail_price"]
 
-    def calculate_beverage_price_weight(self) -> Decimal:
-        sum_of_all_price_weights = Decimal(0)
-
-        total_retail_price = self.get_total_retail_price()
-
-        for beverage in self.all():
-            beverage.price_weight = beverage.retail_price / total_retail_price
-            sum_of_all_price_weights += beverage.price_weight
-            beverage.save()
-
-        return sum_of_all_price_weights
+    def get_total_number_of_sales(self) -> Decimal:
+        """
+        Returns the sum of sales for each beverage
+        """
+        return self.aggregate(
+            total_number_of_sales=Sum("number_of_sales"),
+        )["total_number_of_sales"]

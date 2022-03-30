@@ -18,7 +18,6 @@ class BeverageListView(generic.ListView):
 class BeverageUpdateView(generic.UpdateView):
     model = Beverage
     fields = ["number_of_sales"]
-    template_name = "beverage/beverage_list.html"
 
     @staticmethod
     def sold(request, *args, **kwargs):
