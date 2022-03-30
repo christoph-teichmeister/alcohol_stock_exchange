@@ -1,10 +1,17 @@
 {% extends 'base_template.html' %}
 
+{% load static %}
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/history.css' %}"/>
+{% endblock %}
+
 {% block title %}BSM - Market Status{% endblock %}
 
 {% block content %}
     <div id="chartContent" class="content">
-        <canvas id="MarketStatusChart"></canvas>
+        <div class="chart-container">
+            <canvas id="MarketStatusChart"></canvas>
+        </div>
     </div>
 {% endblock %}
 
@@ -45,7 +52,26 @@
         return {
           type: 'line',
           data: getChartData(props),
-          options: {}
+          options: {
+            maintainAspectRatio: false,
+            elements: {
+              point: {
+                radius: 0,
+                hoverRadius: 10,
+              },
+              line: {
+                borderJoinStyle: 'round',
+              },
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  boxWidth: 10,
+                  color: '#FFFFFF',
+                },
+              },
+            }
+          }
         }
       }
 
