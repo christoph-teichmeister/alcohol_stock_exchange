@@ -9,7 +9,7 @@ from beverage.services import BeverageSaleService
 class BeverageListView(generic.ListView):
     model = Beverage
     context_object_name = "beverages"
-    template_name = "beverage/beverage_list.html"
+    template_name = "beverage/beverage_list_base.html"
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related("stock_prices")
@@ -26,12 +26,14 @@ class BeverageUpdateView(generic.UpdateView):
         Returns a render of beverage_card.html.
         """
 
-        beverage = BeverageSaleService.process(beverage_id=kwargs.get("pk"))
+        BeverageSaleService.process(beverage_id=kwargs.get("pk"))
 
         return render(
             request=request,
-            template_name="beverage/beverage_card.html",
-            context={"beverage": beverage},
+            template_name="beverage/beverage_list.html",
+            context={
+                "beverages": Beverage.objects.all().prefetch_related("stock_prices"),
+            },
         )
 
     @staticmethod
@@ -49,6 +51,8 @@ class BeverageUpdateView(generic.UpdateView):
 
         return render(
             request=request,
-            template_name="beverage/beverage_card.html",
-            context={"beverage": beverage},
+            template_name="beverage/beverage_list.html",
+            context={
+                "beverages": Beverage.objects.all().prefetch_related("stock_prices"),
+            },
         )

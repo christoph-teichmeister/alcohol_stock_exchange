@@ -1,9 +1,5 @@
-{% extends 'base_template.html' %}
-
-{% block title %}BSM - Beverages{% endblock %}
-
-{% block content %}
-    {% if object_list %}
+<div id="beverage-list">
+    {% if beverages %}
         <div class="container-fluid">
             <div class="row">
                 <!-- Iterate over object_list -->
@@ -19,4 +15,5 @@
             <hr/>
         </div>
     {% endif %}
-{% endblock %}
+</div>
+

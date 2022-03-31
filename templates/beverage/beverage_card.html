@@ -9,7 +9,8 @@
                hx-trigger="click"
                hx-post='{% url 'beverage_sold' beverage.id %}'
                hx-swap="outerHTML"
-               hx-target="#beverage-card-{{ beverage.id }}"
+                    {# hx-target="#beverage-card-{{ beverage.id }}"#}
+               hx-target="#beverage-list"
             >+</a>
 
             <a class="ml-5 btn btn-square btn-danger rounded-circle"
@@ -17,7 +18,8 @@
                hx-trigger="click"
                hx-post='{% url 'beverage_revert_sale' beverage.id %}'
                hx-swap="outerHTML"
-               hx-target="#beverage-card-{{ beverage.id }}"
+                    {# hx-target="#beverage-card-{{ beverage.id }}"#}
+               hx-target="#beverage-list"
             >-</a>
         </div>
     </div>
