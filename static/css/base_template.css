@@ -1,0 +1,14 @@
+.loader {
+    position: fixed;
+    left: 26rem;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: rgb(17, 20, 23);
+
+    /*VALUES I PLAYED AROUND WITH*/
+    /*background: black;*/
+    /*background: rgb(25, 28, 32);*/
+    /*opacity: 50%;*/
+}

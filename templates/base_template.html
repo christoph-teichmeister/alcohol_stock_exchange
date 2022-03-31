@@ -14,6 +14,8 @@
 
     {% block custom_css %}{% endblock %}
 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_template.css' %}"/>
+
     <!-- Halfmoon CSS -->
     <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet"/>
 
@@ -22,21 +24,17 @@
 
     <script>
       // fade out loading screen once page is loaded
-      $(window).on('load', () => $("#loader").fadeOut("slow"));
+      $(window).on('load', () => {
+        // wait for one second
+        setTimeout(function(){},1000);
+        // fade out loader
+        $("#loader").fadeOut("slow")
+      });
     </script>
 </head>
 <body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-set-preferred-mode-onload="true">
 <!-- Loader -->
-<div id="loader" style="position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: black;
-    opacity: 50%;
-">
-</div>
+<div id="loader" class="loader"></div>
 
 <!-- Modals go here -->
 <!-- Reference: https://www.gethalfmoon.com/docs/modal -->
