@@ -5,7 +5,9 @@ from stock_price.models import StockPrice
 
 @admin.register(StockPrice)
 class StockPriceAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["__str__", "beverage", "price", "timestamp"]
+    list_filter = ["timestamp"]
+    search_fields = ["beverage"]
 
 
 class StockPriceInlineAdmin(admin.StackedInline):
