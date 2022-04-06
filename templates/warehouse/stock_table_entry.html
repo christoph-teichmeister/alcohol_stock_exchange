@@ -1,5 +1,25 @@
-<tr>
-    <th>{{ stock.beverage.name }}</th>
-    <td>{{ stock.amount }}</td>
-    <td class="text-right">ACTION BTN</td>
+{% load static %}
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/warehouse/stock_table_entry.css' %}"/>
+{% endblock %}
+
+{% include 'warehouse/stock_table_entry_modal.html' %}
+<tr class="clickable-row" onclick="tableRowOnClick({{ stock.id }}, {{ stock.amount }}, {{ stock.beverage.id }})">
+
+        <th>{{ stock.beverage.name }}</th>
+        <td>{{ stock.amount }}</td>
+        <td class="text-right">ACTION BTN</td>
 </tr>
+
+{% block scripts %}
+
+    <script>
+      function tableRowOnClick(stockId, amount, beverageId) {
+        console.log('clicked!')
+        console.log(stockId, amount, beverageId)
+
+        halfmoon.toggleModal('stock-edit-modal')
+      }
+
+    </script>
+{% endblock %}
