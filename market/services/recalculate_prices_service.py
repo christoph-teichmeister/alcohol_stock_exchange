@@ -80,3 +80,25 @@ class RecalculatePricesService:
             1 / (1 / x1 * Decimal(pow(beverage_sales_vs_total_sales, Decimal(0.9))))
             + x2
         )
+
+    def _third_function(self):
+        """
+        Alle EKs zusammenrechnen => X
+        Wenn Bier zu VK 2€ verkauft wird, muss der Bierpreis steigen.
+        Dadurch hat Bier ein größeres Gewicht im Gesamtpreis X und die Differenz (X-Bierpreis) muss auf alle anderen
+        Getränke zu einem Gewicht aufgeteilt werden.
+        """
+        pass
+
+    def _fourth_function(self):
+        """
+        Ich fake das Angebot, indem ich sage, dass ich mir vorstelle, dass "Bier pro Minute = 5" verkauft wurde.
+        Wenn die tatsächliche Nachfrage unter der Vorstellung liegt, sinkt der Preis, ansonsten steigt der.
+        Das bräuchte einen Celery Task, der regelmäßig checkt, ob das so ist.
+
+        Idee:
+        Hier noch den Bestand einbringen in Relation zu Endzeit der Bar (das wäre ein neues Feld noch).
+        Damit stünde am Anfang des Abends die Preisveränderung des Bieres bereits fest und ich habe eine Kurve,
+        an der ich mich orientieren kann.
+        """
+        pass
